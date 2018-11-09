@@ -28,6 +28,7 @@ const tmReducer = (state = initialState, action) => {
       return {
         ...state,
         filteredImages: action.payload.images,
+        selectedGroup: action.payload.group,
       }
     case actions.FOCUS_IMAGE:
       return {
