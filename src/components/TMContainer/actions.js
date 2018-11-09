@@ -1,0 +1,4 @@
+export const SET_IMAGES = 'SET_IMAGES'
+export const SET_FILTERED_IMAGES = 'SET_FILTERED_IMAGES'
+export const CLICK_IMAGE = 'CLICK_IMAGE'
+export const FOCUS_IMAGE = 'FOCUS_IMAGE'
