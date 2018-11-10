@@ -1,39 +1,77 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
-import _ from 'lodash'
 
-import GoogleMapReact from 'google-map-react'
+import { withScriptjs, withGoogleMap, GoogleMap, Marker } from "react-google-maps"
 
 import config from './config'
-import { getGeoCenter } from './map-utils'
+import { getRectangleFromPositions } from './map-utils'
 
-const TMMap = ({ images, handleImageClick, handleImageHover, focusedImage }) => (
-  <div
-    style={{ height: '512px' }}
-  >
-    <GoogleMapReact
-      bootstrapURLKeys={{ key: config.googleMapsApiKey }}
-      defaultZoom={10}
-      defaultCenter={images && images.length > 0 ? getGeoCenter(images) : { lat: 60, lng: 10 }}
-      center={getGeoCenter(images)}
+const MyMap = withScriptjs(withGoogleMap((props) => {
+  const { images, handleImageClick, handleImageHover, focusedImage } = props
+
+  return (
+    <GoogleMap
+      defaultZoom={8}
+      defaultCenter={{ lat: 60, lng: 10 }}
+      ref={props.handleMapMounted}
     >
       {
-        _.sortBy(images, image => image.id === focusedImage).map(imageObject => (
-          <TMMarker
+        images.map(imageObject => (
+          <Marker
             key={imageObject.id}
-            lng={imageObject.position.lng}
-            lat={imageObject.position.lat}
+            position={imageObject.position}
             image={imageObject}
             focus={imageObject.id === focusedImage}
-            handleClick={handleImageClick}
-            handleMouseOver={handleImageHover}
-            handleMouseLeave={handleImageHover}
+            onClick={() => handleImageClick(imageObject)}
+            onMouseOver={() => handleImageHover(imageObject)}
+            onMouseLeave={handleImageHover}
           />
         ))
       }
-    </GoogleMapReact>
-  </div>
-)
+    </GoogleMap>
+  )
+}
+))
+class TMMap extends Component {
+  constructor(props) {
+    super(props)
+    this.handleMapMounted = this.handleMapMounted.bind(this)
+  }
+
+  componentDidUpdate() {
+    console.log('componentDidUpdate')
+    if (this.map) {
+      this.map.fitBounds(getRectangleFromPositions(this.props.images.map(image => image.position)))
+    }
+  }
+
+  handleMapMounted(map) {
+    console.log('handleMapMounted')
+    console.log(map)
+
+    this.map = map
+    this.map.fitBounds(getRectangleFromPositions(this.props.images.map(image => image.position)))
+  }
+
+  render() {
+    const { images, handleImageClick, handleImageHover } = this.props
+    const size = { width: window.innerWidth / 3, height: window.innerHeight }
+    //const { center, zoom } = fitBounds(getRectangleFromPositions(images.map(image => image.position)), size)
+
+    return (
+      <MyMap
+        googleMapURL={`https://maps.googleapis.com/maps/api/js?v=3.exp&libraries=geometry,drawing,places&key=${config.googleMapsApiKey}`}
+        loadingElement={<div style={{ height: `100%` }} />}
+        containerElement={<div style={{ height: size.height }} />}
+        mapElement={<div style={{ height: `100%` }} />}
+        handleMapMounted={this.handleMapMounted}
+        handleImageHover={handleImageHover}
+        handleImageClick={handleImageClick}
+        images={images}
+      />
+    )
+  }
+}
 
 TMMap.propTypes = {
   images: PropTypes.array.isRequired,

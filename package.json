@@ -5,11 +5,11 @@
   "dependencies": {
     "compressorjs": "^1.0.1",
     "exif-js": "^2.3.0",
-    "google-map-react": "^1.0.9",
     "moment": "^2.22.2",
     "prop-types": "^15.6.2",
     "react": "^16.6.1",
     "react-dom": "^16.6.1",
+    "react-google-maps": "^9.4.5",
     "react-redux": "^5.1.0",
     "react-scripts": "2.1.1",
     "redux": "^4.0.1",
