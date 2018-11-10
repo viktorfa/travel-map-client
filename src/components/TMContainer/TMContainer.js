@@ -2,6 +2,7 @@ import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
 import _ from 'lodash'
+import { Grid, Sticky } from 'semantic-ui-react'
 
 import TMMap from '../../TMMap';
 import { actions } from '.';
@@ -46,6 +47,10 @@ class TMContainer extends Component {
     }
   }
 
+  state = {}
+
+  handleContextRef = contextRef => this.setState({ contextRef })
+
   render() {
     const { images, selectedImage, filteredImages, groupedImages, focusedImage, selectedGroup } = this.props
     return (
@@ -58,21 +63,44 @@ class TMContainer extends Component {
             onChange={this.handleInputChange}
           />
         </div>
-        <div>
-          <TMGroupButtons
-            groups={_.sortBy(Object.entries(groupedImages), ([key, value]) => value[0].timestamp.unix()).map(([key, value]) => key)}
-            handleClick={this.handleImageGroupClick}
-            selectedGroup={selectedGroup}
-          />
-        </div>
-        {
-          <TMMap
-            images={filteredImages && filteredImages.length > 0 ? filteredImages : images}
-            focusedImage={focusedImage}
-            handleImageClick={this.handleImageClick}
-            handleImageHover={this.handleImageHover}
-          />
-        }
+        <Grid
+          columns={2}
+        >
+          <Grid.Column
+            width={10}
+            >
+            <div ref={this.handleContextRef}>
+              <Grid.Row>
+                <TMGroupButtons
+                  groups={_.sortBy(Object.entries(groupedImages), ([key, value]) => value[0].timestamp.unix()).map(([key, value]) => key)}
+                  handleClick={this.handleImageGroupClick}
+                  selectedGroup={selectedGroup}
+                  />
+
+              </Grid.Row>
+              <Grid.Row>
+                <TMImageCarousel
+                  images={filteredImages && filteredImages.length > 0 ? filteredImages : images}
+                  focusedImage={focusedImage}
+                  handleImageClick={this.handleImageClick}
+                  handleImageHover={this.handleImageHover}
+                  />
+              </Grid.Row>
+            </div>
+          </Grid.Column>
+          <Grid.Column
+                  width={6}
+          >
+            <Sticky context={this.state.contextRef}>
+              <TMMap
+                images={filteredImages && filteredImages.length > 0 ? filteredImages : images}
+                focusedImage={focusedImage}
+                handleImageClick={this.handleImageClick}
+                handleImageHover={this.handleImageHover}
+              />
+            </Sticky>
+          </Grid.Column>
+        </Grid>
         {
           selectedImage && (
             <TMFullScreenImage
@@ -81,12 +109,6 @@ class TMContainer extends Component {
             />
           )
         }
-        <TMImageCarousel
-          images={filteredImages && filteredImages.length > 0 ? filteredImages : images}
-          focusedImage={focusedImage}
-          handleImageClick={this.handleImageClick}
-          handleImageHover={this.handleImageHover}
-        />
       </div>
     )
   }

@@ -5,27 +5,22 @@ import _ from 'lodash'
 class TMImageCarousel extends Component {
   render() {
     const { images, handleImageClick, handleImageHover } = this.props
+    console.log(images)
     return (
       <div
-        style={{
-          display: 'flex',
-          flexDirection: 'row',
-          flexWrap: 'wrap',
-        }}
+        className='gallery-image-grid'
       >
         {
           _.sortBy(images, image => image.timestamp.unix()).map(image => (
-            <img
-              onClick={() => handleImageClick(image)}
-              onMouseEnter={() => handleImageHover(image)}
-              onMouseLeave={() => handleImageHover(null)}
-              src={image.url}
-              alt={'Piss'}
-              key={image.id}
-              style={{
-                maxHeight: '256px',
-              }}
-            />
+              <img
+                className='gallery-image'
+                onClick={() => handleImageClick(image)}
+                onMouseEnter={() => handleImageHover(image)}
+                onMouseLeave={() => handleImageHover(null)}
+                src={image.url}
+                alt={'Piss'}
+                key={image.id}
+              />
           ))
         }
       </div>

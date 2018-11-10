@@ -16,6 +16,7 @@ class TMFullScreenImage extends Component {
           flexDirection: 'column',
           alignItems: 'center',
           backgroundColor: 'rgba(20, 20, 20, .8)',
+          zIndex: 900,
         }}
       >
         <span

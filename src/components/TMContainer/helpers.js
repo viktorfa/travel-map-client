@@ -9,6 +9,8 @@ export const readImageInput = async imageFiles => {
         position: getCoordinates(metaData),
         timestamp: getDateTime(metaData),
         id: getImageId(metaData),
+        width: metaData.ImageWidth,
+        height: metaData.ImageHeight,
         url,
       }
       if (imageObject && imageObject.position) {
