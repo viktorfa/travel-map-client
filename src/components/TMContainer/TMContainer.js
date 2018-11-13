@@ -4,7 +4,7 @@ import { connect } from 'react-redux'
 import _ from 'lodash'
 import { Grid, Sticky } from 'semantic-ui-react'
 
-import TMMap from '../../TMMap';
+import TMMap from './TMMap';
 import { actions } from '.';
 import { readImageInput } from './helpers'
 import TMFullScreenImage from './TMFullScreenImage';
@@ -22,8 +22,6 @@ class TMContainer extends Component {
   }
 
   handleInputChange(event) {
-    console.log('files')
-    console.log(event.target.files)
     this.props.handleImageInput(event.target.files)
   }
 
@@ -65,6 +63,7 @@ class TMContainer extends Component {
         </div>
         <Grid
           columns={2}
+          stackable
         >
           <Grid.Column
             width={10}

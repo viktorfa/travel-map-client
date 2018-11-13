@@ -1,14 +1,14 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
+import _ from 'lodash'
 
 import { withScriptjs, withGoogleMap, GoogleMap, Marker } from "react-google-maps"
 
-import config from './config'
-import { getRectangleFromPositions } from './map-utils'
+import config from '../../config'
+import { getRectangleFromPositions } from '../../map-utils'
 
 const MyMap = withScriptjs(withGoogleMap((props) => {
   const { images, handleImageClick, handleImageHover, focusedImage } = props
-
   return (
     <GoogleMap
       defaultZoom={8}
@@ -18,13 +18,13 @@ const MyMap = withScriptjs(withGoogleMap((props) => {
       {
         images.map(imageObject => (
           <Marker
-            key={imageObject.id}
             position={imageObject.position}
-            image={imageObject}
-            focus={imageObject.id === focusedImage}
             onClick={() => handleImageClick(imageObject)}
             onMouseOver={() => handleImageHover(imageObject)}
             onMouseLeave={handleImageHover}
+            key={imageObject.id}
+            labelAnchor={new window.google.maps.Point(0, 0)}
+            opacity={focusedImage === imageObject.id ? 1 : .4}
           />
         ))
       }
@@ -38,25 +38,21 @@ class TMMap extends Component {
     this.handleMapMounted = this.handleMapMounted.bind(this)
   }
 
-  componentDidUpdate() {
-    console.log('componentDidUpdate')
-    if (this.map) {
+  componentDidUpdate({ images: oldImages }) {
+    const shouldRefitMap = this.map && !_.isEqual(oldImages.map(({ id }) => id), this.props.images.map(({ id }) => id))
+    if (shouldRefitMap) {
       this.map.fitBounds(getRectangleFromPositions(this.props.images.map(image => image.position)))
     }
   }
 
   handleMapMounted(map) {
-    console.log('handleMapMounted')
-    console.log(map)
-
     this.map = map
     this.map.fitBounds(getRectangleFromPositions(this.props.images.map(image => image.position)))
   }
 
   render() {
-    const { images, handleImageClick, handleImageHover } = this.props
+    const { images, handleImageClick, handleImageHover, focusedImage } = this.props
     const size = { width: window.innerWidth / 3, height: window.innerHeight }
-    //const { center, zoom } = fitBounds(getRectangleFromPositions(images.map(image => image.position)), size)
 
     return (
       <MyMap
@@ -67,6 +63,7 @@ class TMMap extends Component {
         handleMapMounted={this.handleMapMounted}
         handleImageHover={handleImageHover}
         handleImageClick={handleImageClick}
+        focusedImage={focusedImage}
         images={images}
       />
     )
@@ -78,48 +75,6 @@ TMMap.propTypes = {
   focusedImage: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
   handleImageClick: PropTypes.func.isRequired,
   handleImageHover: PropTypes.func.isRequired,
-}
-
-class TMMarker extends Component {
-  constructor(props) {
-    super(props)
-    this.handleClick = this.handleClick.bind(this)
-    this.handleMouseOver = this.handleMouseOver.bind(this)
-    this.handleMouseLeave = this.handleMouseLeave.bind(this)
-  }
-
-  handleClick() {
-    this.props.handleClick(this.props.image)
-  }
-  handleMouseOver() {
-    this.props.handleMouseOver(this.props.image)
-  }
-  handleMouseLeave() {
-    this.props.handleMouseLeave()
-  }
-
-  render() {
-    return (
-      <img
-        onMouseOver={this.handleMouseOver}
-        onMouseLeave={this.handleMouseLeave}
-        src={this.props.image.url}
-        alt={'Piss'}
-        style={{
-          width: this.props.focus ? '128px' : '64px',
-        }}
-        onClick={this.handleClick}
-      />
-    )
-  }
-}
-
-TMMarker.propTypes = {
-  image: PropTypes.object.isRequired,
-  handleClick: PropTypes.func.isRequired,
-  handleMouseOver: PropTypes.func.isRequired,
-  handleMouseLeave: PropTypes.func.isRequired,
-  focus: PropTypes.bool,
 }
 
 export default TMMap

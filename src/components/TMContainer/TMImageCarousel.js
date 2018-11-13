@@ -4,7 +4,7 @@ import _ from 'lodash'
 
 class TMImageCarousel extends Component {
   render() {
-    const { images, handleImageClick, handleImageHover } = this.props
+    const { images, handleImageClick, handleImageHover, focusedImage } = this.props
     console.log(images)
     return (
       <div
@@ -12,15 +12,15 @@ class TMImageCarousel extends Component {
       >
         {
           _.sortBy(images, image => image.timestamp.unix()).map(image => (
-              <img
-                className='gallery-image'
-                onClick={() => handleImageClick(image)}
-                onMouseEnter={() => handleImageHover(image)}
-                onMouseLeave={() => handleImageHover(null)}
-                src={image.url}
-                alt={'Piss'}
-                key={image.id}
-              />
+            <img
+              className={`gallery-image ${focusedImage === image.id ? 'gallery-image-active' : ''}`}
+              onClick={() => handleImageClick(image)}
+              onMouseEnter={() => handleImageHover(image)}
+              onMouseLeave={() => handleImageHover(null)}
+              src={image.url}
+              alt={'Piss'}
+              key={image.id}
+            />
           ))
         }
       </div>
