@@ -8,7 +8,7 @@ import TMMap from './TMMap';
 import { actions } from '.';
 import { readImageInput } from './helpers'
 import TMFullScreenImage from './TMFullScreenImage';
-import TMImageCarousel from './TMImageCarousel';
+import TMScrollableImageList from './TMScrollableImageList';
 import TMGroupButtons from './TMGroupButtons';
 
 class TMContainer extends Component {
@@ -67,30 +67,28 @@ class TMContainer extends Component {
         >
           <Grid.Column
             width={10}
-            >
+          >
             <div ref={this.handleContextRef}>
               <Grid.Row>
-                <TMGroupButtons
-                  groups={_.sortBy(Object.entries(groupedImages), ([key, value]) => value[0].timestamp.unix()).map(([key, value]) => key)}
-                  handleClick={this.handleImageGroupClick}
-                  selectedGroup={selectedGroup}
-                  />
-
-              </Grid.Row>
-              <Grid.Row>
-                <TMImageCarousel
-                  images={filteredImages && filteredImages.length > 0 ? filteredImages : images}
+                <TMScrollableImageList
+                  groupedImages={groupedImages}
                   focusedImage={focusedImage}
                   handleImageClick={this.handleImageClick}
                   handleImageHover={this.handleImageHover}
-                  />
+                  switchGroup={this.handleImageGroupClick}
+                />
               </Grid.Row>
             </div>
           </Grid.Column>
           <Grid.Column
-                  width={6}
+            width={6}
           >
             <Sticky context={this.state.contextRef}>
+              <TMGroupButtons
+                groups={_.sortBy(Object.entries(groupedImages), ([key, value]) => value[0].timestamp.unix()).map(([key, value]) => key)}
+                handleClick={this.handleImageGroupClick}
+                selectedGroup={selectedGroup}
+              />
               <TMMap
                 images={filteredImages && filteredImages.length > 0 ? filteredImages : images}
                 focusedImage={focusedImage}
