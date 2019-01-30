@@ -1,5 +1,5 @@
-@import url('./components/TMContainer/TMImageCarousel.css');
-@import url('./components/TMContainer/TMMap.css');
+@import url('./components/TMViewer/TMImageCarousel.css');
+@import url('./components/TMViewer/TMMap.css');
 
 body {
   margin: 0;

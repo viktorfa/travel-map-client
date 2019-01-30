@@ -9,10 +9,10 @@ import 'semantic-ui-css/semantic.min.css';
 import './index.css';
 import App from './App';
 import * as serviceWorker from './serviceWorker';
-import { reducer as tmReducer, STATE_KEY as TM_STATE_KEY } from './components/TMContainer'
+import { reducer as tmvReducer, STATE_KEY as TMV_STATE_KEY } from './components/TMViewer'
 
 const rootReducer = combineReducers({
-  [TM_STATE_KEY]: tmReducer,
+  [TMV_STATE_KEY]: tmvReducer,
 })
 
 const middleware = process.env.NODE_ENV === 'development' ? composeWithDevTools(applyMiddleware(thunk)) :

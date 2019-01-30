@@ -125,12 +125,12 @@ TMContainer.propTypes = {
 
 
 const mapStateToProps = (state) => ({
-  images: state.tm.images,
-  filteredImages: state.tm.filteredImages,
-  selectedImage: state.tm.selectedImage,
-  selectedGroup: state.tm.selectedGroup,
-  focusedImage: state.tm.focusedImage,
-  groupedImages: state.tm.groupedImages,
+  images: state.tmv.images,
+  filteredImages: state.tmv.filteredImages,
+  selectedImage: state.tmv.selectedImage,
+  selectedGroup: state.tmv.selectedGroup,
+  focusedImage: state.tmv.focusedImage,
+  groupedImages: state.tmv.groupedImages,
 })
 
 const mapDispatchToProps = (dispatch) => ({

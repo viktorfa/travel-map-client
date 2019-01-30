@@ -4,7 +4,7 @@ import { exampleState } from '../../assets/example-state'
 import * as actions from './actions'
 import { getImagesGroupedByDate } from '../../image-utils'
 
-export const STATE_KEY = 'tm'
+export const STATE_KEY = 'tmv'
 
 const defaultImages = exampleState[STATE_KEY].images.map(image => ({ ...image, timestamp: moment(image.timestamp) }))
 
@@ -15,7 +15,7 @@ const initialState = {
   selectedImage: null,
 }
 
-const tmReducer = (state = initialState, action) => {
+const tmvReducer = (state = initialState, action) => {
   switch (action.type) {
     case actions.SET_IMAGES:
       return {
@@ -46,4 +46,4 @@ const tmReducer = (state = initialState, action) => {
 }
 
 
-export default tmReducer
+export default tmvReducer

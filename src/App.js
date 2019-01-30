@@ -1,12 +1,20 @@
 import React, { Component } from 'react';
 import './App.css';
-import TMContainer from './components/TMContainer';
+import TMViewer from './components/TMViewer';
+import TMCreator from './components/TMCreator';
 
 class App extends Component {
   render() {
     return (
       <div className="App">
-        <TMContainer />
+      {
+        (window.location.pathname === '/create' && (
+          <TMCreator />
+        ))
+        || (
+          <TMViewer />
+        )
+      }
       </div>
     );
   }
