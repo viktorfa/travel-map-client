@@ -10,9 +10,11 @@ import './index.css';
 import App from './App';
 import * as serviceWorker from './serviceWorker';
 import { reducer as tmvReducer, STATE_KEY as TMV_STATE_KEY } from './components/TMViewer'
+import { reducer as tmcReducer, STATE_KEY as TMC_STATE_KEY } from './components/TMCreator'
 
 const rootReducer = combineReducers({
   [TMV_STATE_KEY]: tmvReducer,
+  [TMC_STATE_KEY]: tmcReducer,
 })
 
 const middleware = process.env.NODE_ENV === 'development' ? composeWithDevTools(applyMiddleware(thunk)) :
