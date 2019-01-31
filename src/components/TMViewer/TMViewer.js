@@ -4,9 +4,8 @@ import { connect } from 'react-redux'
 import _ from 'lodash'
 import { Grid, Sticky } from 'semantic-ui-react'
 
+import {handleImageClick, handleImageInput, setFilteredImages, setFocusImage} from './actionCreators'
 import TMMap from './TMMap';
-import { actions } from '.';
-import { readImageInput } from './helpers'
 import TMFullScreenImage from './TMFullScreenImage';
 import TMScrollableImageList from './TMScrollableImageList';
 import TMGroupButtons from './TMGroupButtons';
@@ -15,14 +14,9 @@ class TMContainer extends Component {
   constructor(props) {
     super(props)
 
-    this.handleInputChange = this.handleInputChange.bind(this)
     this.handleImageClick = this.handleImageClick.bind(this)
     this.handleImageHover = this.handleImageHover.bind(this)
     this.handleImageGroupClick = this.handleImageGroupClick.bind(this)
-  }
-
-  handleInputChange(event) {
-    this.props.handleImageInput(event.target.files)
   }
 
   handleImageClick(image) {
@@ -53,14 +47,6 @@ class TMContainer extends Component {
     const { images, selectedImage, filteredImages, groupedImages, focusedImage, selectedGroup } = this.props
     return (
       <div>
-        <div>
-          <input
-            type='file'
-            multiple
-            accept='image/*'
-            onChange={this.handleInputChange}
-          />
-        </div>
         <Grid
           columns={2}
           stackable
@@ -139,13 +125,5 @@ const mapDispatchToProps = (dispatch) => ({
   handleImageHover: imageId => dispatch(setFocusImage(imageId)),
   setFilteredImages: (images, group) => dispatch(setFilteredImages(images, group)),
 })
-const handleImageInput = imageFiles => async dispatch => {
-  const images = await readImageInput(imageFiles)
-  dispatch(setImages(images))
-}
-const setImages = images => ({ type: actions.SET_IMAGES, payload: { images } })
-const handleImageClick = image => ({ type: actions.CLICK_IMAGE, payload: { image } })
-const setFilteredImages = (images, group) => ({ type: actions.SET_FILTERED_IMAGES, payload: { images, group } })
-const setFocusImage = imageId => ({ type: actions.FOCUS_IMAGE, payload: { imageId } })
 
 export default connect(mapStateToProps, mapDispatchToProps)(TMContainer)

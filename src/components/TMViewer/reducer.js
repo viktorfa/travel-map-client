@@ -1,16 +1,11 @@
-import moment from 'moment';
-
-import { exampleState } from '../../assets/example-state'
 import * as actions from './actions'
 import { getImagesGroupedByDate } from '../../image-utils'
 
 export const STATE_KEY = 'tmv'
 
-const defaultImages = exampleState[STATE_KEY].images.map(image => ({ ...image, timestamp: moment(image.timestamp) }))
-
 const initialState = {
-  images: defaultImages,
-  groupedImages: getImagesGroupedByDate(defaultImages),
+  images: [],
+  groupedImages: {},
   filteredImages: [],
   selectedImage: null,
 }
