@@ -4,7 +4,7 @@ import _ from 'lodash'
 
 import { withScriptjs, withGoogleMap, GoogleMap, Marker } from "react-google-maps"
 
-import config from '../../config'
+import {googleMapsApiKey} from '../../config/vars'
 import { getRectangleFromPositions } from '../../map-utils'
 
 const MyMap = withScriptjs(withGoogleMap((props) => {
@@ -46,8 +46,10 @@ class TMMap extends Component {
   }
 
   handleMapMounted(map) {
-    this.map = map
-    this.map.fitBounds(getRectangleFromPositions(this.props.images.map(image => image.position)))
+    if (map) {
+      this.map = map
+      this.map.fitBounds(getRectangleFromPositions(this.props.images.map(image => image.position)))
+    } 
   }
 
   render() {
@@ -56,7 +58,7 @@ class TMMap extends Component {
 
     return (
       <MyMap
-        googleMapURL={`https://maps.googleapis.com/maps/api/js?v=3.exp&libraries=geometry,drawing,places&key=${config.googleMapsApiKey}`}
+        googleMapURL={`https://maps.googleapis.com/maps/api/js?v=3.exp&libraries=geometry,drawing,places&key=${googleMapsApiKey}`}
         loadingElement={<div style={{ height: `100%` }} />}
         containerElement={<div style={{ height: size.height }} />}
         mapElement={<div style={{ height: `100%` }} />}
