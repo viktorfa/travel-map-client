@@ -13,6 +13,7 @@ const MyMap = withScriptjs(withGoogleMap((props) => {
     <GoogleMap
       defaultZoom={8}
       defaultCenter={{ lat: 60, lng: 10 }}
+      defaultOptions={{disableDefaultUI: true}}
       ref={props.handleMapMounted}
     >
       {
@@ -54,13 +55,13 @@ class TMMap extends Component {
 
   render() {
     const { images, handleImageClick, handleImageHover, focusedImage } = this.props
-    const size = { width: window.innerWidth / 3, height: window.innerHeight }
+    const size = { width: this.props.width, height: this.props.height }
 
     return (
       <MyMap
         googleMapURL={`https://maps.googleapis.com/maps/api/js?v=3.exp&libraries=geometry,drawing,places&key=${googleMapsApiKey}`}
         loadingElement={<div style={{ height: `100%` }} />}
-        containerElement={<div style={{ height: size.height }} />}
+        containerElement={<div style={{ ...size }} />}
         mapElement={<div style={{ height: `100%` }} />}
         handleMapMounted={this.handleMapMounted}
         handleImageHover={handleImageHover}
@@ -77,6 +78,12 @@ TMMap.propTypes = {
   focusedImage: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
   handleImageClick: PropTypes.func.isRequired,
   handleImageHover: PropTypes.func.isRequired,
+  height: PropTypes.number,
+  width: PropTypes.number,
+}
+TMMap.defaultProps = {
+  height: (window.innerHeight / 100) * 40,
+  width: window.innerWidth,
 }
 
 export default TMMap

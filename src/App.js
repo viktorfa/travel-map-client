@@ -21,6 +21,16 @@ class App extends Component {
           <TMCreator />
         </div>
         <div style={{display: this.state.path !== '/create' ? '' : 'none'}}>
+        <Button
+          icon='x'
+          onClick={() => this.setState({path: '/create'})}
+          style={{
+            zIndex: 50,
+            top: 0,
+            left: 0,
+            position: 'absolute',
+          }}
+        />
           <TMViewer />
         </div>
       </div>

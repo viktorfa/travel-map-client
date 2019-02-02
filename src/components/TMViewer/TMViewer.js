@@ -2,13 +2,11 @@ import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
 import _ from 'lodash'
-import { Grid, Sticky } from 'semantic-ui-react'
 
 import {handleImageClick, handleImageInput, setFilteredImages, setFocusImage} from './actionCreators'
 import TMMap from './TMMap';
 import TMFullScreenImage from './TMFullScreenImage';
-import TMScrollableImageList from './TMScrollableImageList';
-import TMGroupButtons from './TMGroupButtons';
+import TMHorizontalImageList from './TMHorizontalImageList';
 
 class TMContainer extends Component {
   constructor(props) {
@@ -44,46 +42,36 @@ class TMContainer extends Component {
   handleContextRef = contextRef => this.setState({ contextRef })
 
   render() {
-    const { images, selectedImage, filteredImages, groupedImages, focusedImage, selectedGroup } = this.props
+    const { images, selectedImage, filteredImages, groupedImages, focusedImage } = this.props
+    const [mapHeight, imageListHeight] = [(window.innerHeight / 100) * 40, (window.innerHeight / 100) * 60]
     return (
-      <div>
-        <Grid
-          columns={2}
-          stackable
+      <div
+        style={{position: 'fixed', top: 0, left: 0, width: `${window.innerWidth}px`}}
+      >
+        <div
+          style={{height: `${mapHeight}px`}}
         >
-          <Grid.Column
-            width={10}
-          >
-            <div ref={this.handleContextRef}>
-              <Grid.Row>
-                <TMScrollableImageList
-                  groupedImages={groupedImages}
-                  focusedImage={focusedImage}
-                  handleImageClick={this.handleImageClick}
-                  handleImageHover={this.handleImageHover}
-                  switchGroup={this.handleImageGroupClick}
-                />
-              </Grid.Row>
-            </div>
-          </Grid.Column>
-          <Grid.Column
-            width={6}
-          >
-            <Sticky context={this.state.contextRef}>
-              <TMGroupButtons
-                groups={_.sortBy(Object.entries(groupedImages), ([key, value]) => value[0].timestamp.unix()).map(([key, value]) => key)}
-                handleClick={this.handleImageGroupClick}
-                selectedGroup={selectedGroup}
-              />
-              <TMMap
-                images={filteredImages && filteredImages.length > 0 ? filteredImages : images}
-                focusedImage={focusedImage}
-                handleImageClick={this.handleImageClick}
-                handleImageHover={this.handleImageHover}
-              />
-            </Sticky>
-          </Grid.Column>
-        </Grid>
+          <TMMap
+            images={filteredImages && filteredImages.length > 0 ? filteredImages : images}
+            focusedImage={focusedImage}
+            handleImageClick={this.handleImageClick}
+            handleImageHover={this.handleImageHover}
+            height={mapHeight}
+            />
+        </div>
+        <div
+          style={{height: `${imageListHeight}px`}}
+        >
+          <TMHorizontalImageList
+            groupedImages={groupedImages}
+            images={images}
+            focusedImage={focusedImage}
+            handleImageClick={this.handleImageClick}
+            handleImageHover={this.handleImageHover}
+            switchGroup={this.handleImageGroupClick}
+            height={imageListHeight}
+          />
+        </div>
         {
           selectedImage && (
             <TMFullScreenImage

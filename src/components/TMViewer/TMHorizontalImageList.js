@@ -14,6 +14,7 @@ class TMHorizontalImageList extends Component {
     this.handleImageFocus = this.handleImageFocus.bind(this)
   }
   handleGroupSwitch(group) {
+    console.log(`Enter: ${group}`)
     this.props.switchGroup(group)
   }
 
@@ -23,30 +24,47 @@ class TMHorizontalImageList extends Component {
   }
 
   render() {
-    const { images, handleImageClick, handleImageHover, focusedImage } = this.props
+    const { handleImageClick, groupedImages, height } = this.props
     return (
       <div
         className='horizontal-scroll-image-list'
-        onSwipe={() => console.log('swipe')}
       >
         {
-          images.map(({url, title, id, timestamp}) => (
+          _.sortBy(Object.entries(groupedImages), ([key, images]) => images[0].timestamp.unix()).map(([key, images]) => (
             <Waypoint
-              onEnter={() => this.handleImageFocus(id)}
-              onLeave={() => console.log(`Leave: ${id}`)}
-              key={id}
+              onEnter={() => this.handleGroupSwitch(key)}
+              onLeave={() => console.log(`Leave: ${images[0].timestamp}`)}
+              key={key}
               horizontal={true}
             >
-            <div
-              className='horizontal-scroll-image-box'
-            >
-              <p className="horizontal-scroll-image-header">{timestamp.format('MMM DD')}</p>
-              <Image 
-                className='horizontal-scroll-image'
-                src={url}
-                alt={title}
-              />
-            </div>
+              <div
+                className='horizontal-scroll-image-group'
+              >
+                <h2 className="horizontal-scroll-image-header">{images[0].timestamp.format('MMM DD')}</h2>
+                {
+                  images.map((image) => (
+                    <div
+                      className='horizontal-scroll-image-box'
+                      key={image.id}
+                      >
+                      <p
+                      style={{
+                        height: (height / 100) * 10,
+                      }}
+                      >{image.title}</p>
+                      <Image 
+                        style={{
+                          height: (height / 100) * 85,
+                        }}
+                        className='horizontal-scroll-image'
+                        src={image.url}
+                        alt={image.title}
+                        onClick={() => handleImageClick(image)}
+                      />
+                    </div>
+                  ))
+                }
+              </div>
             </Waypoint>
           ))
         }
@@ -59,9 +77,11 @@ class TMHorizontalImageList extends Component {
 TMHorizontalImageList.propTypes = {
   groupedImages: PropTypes.object.isRequired,
   handleImageClick: PropTypes.func.isRequired,
-  handleImageHover: PropTypes.func.isRequired,
   switchGroup: PropTypes.func.isRequired,
-  focusedImage: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
+  height: PropTypes.number,
+}
+TMHorizontalImageList.defaultProps = {
+  height: (window.innerHeight / 100) * 50,
 }
 
 export default TMHorizontalImageList

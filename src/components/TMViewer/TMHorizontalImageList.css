@@ -1,0 +1,25 @@
+.horizontal-scroll-image-list {
+  overflow-x: scroll;
+  white-space: nowrap;
+  display: flex;
+  flex-direction: row;
+  height: 100%;
+}
+
+.horizontal-scroll-image-group {
+  display: flex;
+  flex-shrink: 0;
+}
+
+.horizontal-scroll-image-box {
+  margin: 0 2px;
+  text-align: left;
+}
+.horizontal-scroll-image-box * {
+  margin: 0;
+}
+.horizontal-scroll-image {
+}
+
+.horizontal-scroll-image-header {
+}
