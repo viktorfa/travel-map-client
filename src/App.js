@@ -23,6 +23,8 @@ class App extends Component {
         <div style={{display: this.state.path !== '/create' ? '' : 'none'}}>
         <Button
           icon='x'
+          basic
+          circular
           onClick={() => this.setState({path: '/create'})}
           style={{
             zIndex: 50,

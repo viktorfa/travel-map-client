@@ -15,8 +15,12 @@
   margin: 0 2px;
   text-align: left;
 }
-.horizontal-scroll-image-box * {
+.horizontal-scroll-image-box p {
   margin: 0;
+  display: flex;
+  align-items: end;
+  font-weight: bold;
+  color: gray;
 }
 .horizontal-scroll-image {
 }
