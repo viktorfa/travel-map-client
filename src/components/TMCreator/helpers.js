@@ -65,9 +65,10 @@ export const readSingleImageFile = async imageFile => {
     url: firebaseImageUrl,
     title: imageFile.name,
     lastModified: imageFile.lastModified,
+    originalName: imageFile.name,
   }
 
-  const firestoreRef = await firestore.collection('images').add(imageObjectToFirestoreObject(imageObject))
+  const firestoreRef = await firestore.collection('images').doc(imageObject.originalName).set(imageObjectToFirestoreObject(imageObject))
   console.log('firestoreRef')
   console.log(firestoreRef)
 
