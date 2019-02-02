@@ -1,4 +1,4 @@
-import { readSingleImageFile, fireStoreObjectToImageObject } from './helpers'
+import { readSingleImageFile, fireStoreObjectToImageObject, imageObjectToFirestoreObject } from './helpers'
 import { actions } from '.'
 import { actions as viewerActions } from '../TMViewer'
 import { storage, firestore } from '../../config/firebase'
@@ -19,7 +19,7 @@ export const handleFirebaseStorageInput = (path='user-images/IMG_20181102_165650
   dispatch({type: actions.LOAD_IMAGES, payload: {images: [{url, title: path, id: getImageId({})}]} })
 }
 
-export const loadFirestoreImages = (limit=10) => async dispatch => {
+export const loadFirestoreImages = (limit=99) => async dispatch => {
   const querySnapshot = await firestore.collection('images').limit(limit).get()
   querySnapshot.forEach((doc) => {
     console.log('doc')
@@ -45,6 +45,11 @@ export const resetImages = () => async dispatch => {
 export const removeImage = (imageId) => async dispatch => {
   dispatch({type: actions.REMOVE_IMAGE, payload: {imageId}})
 }
-export const editImage = (newImage) => async dispatch => {
-  dispatch({type: actions.EDIT_IMAGE, payload: {newImage}})
+export const editImage = (image) => async dispatch => {
+  dispatch({type: actions.EDIT_IMAGE, payload: {image}})
+  try {
+    firestore.collection('images').doc(image.id).set(imageObjectToFirestoreObject(image))
+  } catch(error) {
+    console.error(error)
+  }
 }
