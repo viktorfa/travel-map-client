@@ -20,7 +20,7 @@ export const handleFirebaseStorageInput = (path='user-images/IMG_20181102_165650
 }
 
 export const loadFirestoreImages = (limit=10) => async dispatch => {
-  const querySnapshot = await firestore.collection('images').limit(10).get()
+  const querySnapshot = await firestore.collection('images').limit(limit).get()
   querySnapshot.forEach((doc) => {
     console.log('doc')
     console.log(doc)
@@ -31,6 +31,7 @@ export const loadFirestoreImages = (limit=10) => async dispatch => {
       payload: {images: [fireStoreObjectToImageObject({...doc.data(), id: doc.id})]},
     })
   })
+  dispatch(loadImagesToMap())
 }
 
 export const loadImagesToMap = () => async (dispatch, getState) => {
